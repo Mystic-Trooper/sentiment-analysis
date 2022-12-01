@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1960px;
+            height: 1080px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 1960px;
+            height: 1080px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "enjoy", "label": "positive", "shape": "dot", "size": 10}, {"id": "ride", "label": "positive", "shape": "dot", "size": 10}, {"id": "warm", "label": "neutral", "shape": "dot", "size": 10}, {"id": "soy", "label": "neutral", "shape": "dot", "size": 10}, {"id": "milk", "label": "neutral", "shape": "dot", "size": 10}, {"id": "amazake", "label": "neutral", "shape": "dot", "size": 10}, {"id": "cocoa", "label": "neutral", "shape": "dot", "size": 10}, {"id": "powder", "label": "neutral", "shape": "dot", "size": 10}, {"id": "agave", "label": "neutral", "shape": "dot", "size": 10}, {"id": "hope", "label": "positive", "shape": "dot", "size": 10}, {"id": "mums", "label": "positive", "shape": "dot", "size": 10}, {"id": "free", "label": "neutral", "shape": "dot", "size": 10}, {"id": "youre", "label": "neutral", "shape": "dot", "size": 10}, {"id": "mothers", "label": "positive", "shape": "dot", "size": 10}, {"id": "day", "label": "positive", "shape": "dot", "size": 10}, {"id": "love", "label": "positive", "shape": "dot", "size": 10}, {"id": "good", "label": "positive", "shape": "dot", "size": 10}, {"id": "driving", "label": "positive", "shape": "dot", "size": 10}, {"id": "sad", "label": "negative", "shape": "dot", "size": 10}, {"id": "beer", "label": "negative", "shape": "dot", "size": 10}, {"id": "close", "label": "positive", "shape": "dot", "size": 10}, {"id": "seems", "label": "neutral", "shape": "dot", "size": 10}, {"id": "felt", "label": "neutral", "shape": "dot", "size": 10}, {"id": "magazine", "label": "positive", "shape": "dot", "size": 10}, {"id": "magazines", "label": "positive", "shape": "dot", "size": 10}, {"id": "id", "label": "positive", "shape": "dot", "size": 10}, {"id": "work", "label": "positive", "shape": "dot", "size": 10}, {"id": "family", "label": "positive", "shape": "dot", "size": 10}, {"id": "friends", "label": "positive", "shape": "dot", "size": 10}, {"id": "ur", "label": "positive", "shape": "dot", "size": 10}, {"id": "follow", "label": "positive", "shape": "dot", "size": 10}, {"id": "missed", "label": "negative", "shape": "dot", "size": 10}, {"id": "awesome", "label": "negative", "shape": "dot", "size": 10}, {"id": "weather", "label": "negative", "shape": "dot", "size": 10}, {"id": "movie", "label": "negative", "shape": "dot", "size": 10}, {"id": "drinking", "label": "negative", "shape": "dot", "size": 10}, {"id": "goers", "label": "negative", "shape": "dot", "size": 10}, {"id": "hi", "label": "neutral", "shape": "dot", "size": 10}, {"id": "one", "label": "neutral", "shape": "dot", "size": 10}, {"id": "kiwi", "label": "neutral", "shape": "dot", "size": 10}, {"id": "artist", "label": "neutral", "shape": "dot", "size": 10}, {"id": "another", "label": "neutral", "shape": "dot", "size": 10}, {"id": "new", "label": "positive", "shape": "dot", "size": 10}, {"id": "picture", "label": "positive", "shape": "dot", "size": 10}, {"id": "pretty", "label": "positive", "shape": "dot", "size": 10}, {"id": "reflecting", "label": "positive", "shape": "dot", "size": 10}, {"id": "sunlight", "label": "positive", "shape": "dot", "size": 10}, {"id": "leaves", "label": "positive", "shape": "dot", "size": 10}, {"id": "okie", "label": "negative", "shape": "dot", "size": 10}, {"id": "gon", "label": "negative", "shape": "dot", "size": 10}, {"id": "na", "label": "negative", "shape": "dot", "size": 10}, {"id": "tweet", "label": "negative", "shape": "dot", "size": 10}, {"id": "loosing", "label": "negative", "shape": "dot", "size": 10}, {"id": "guys", "label": "negative", "shape": "dot", "size": 10}, {"id": "girls", "label": "negative", "shape": "dot", "size": 10}, {"id": "everyone", "label": "neutral", "shape": "dot", "size": 10}, {"id": "kinda", "label": "neutral", "shape": "dot", "size": 10}, {"id": "lazy", "label": "neutral", "shape": "dot", "size": 10}, {"id": "repetative", "label": "neutral", "shape": "dot", "size": 10}, {"id": "really", "label": "neutral", "shape": "dot", "size": 10}, {"id": "disappointed", "label": "neutral", "shape": "dot", "size": 10}, {"id": "nowyour", "label": "positive", "shape": "dot", "size": 10}, {"id": "kickin", "label": "positive", "shape": "dot", "size": 10}, {"id": "burnt", "label": "negative", "shape": "dot", "size": 10}, {"id": "hand", "label": "negative", "shape": "dot", "size": 10}, {"id": "cooker", "label": "negative", "shape": "dot", "size": 10}, {"id": "hurts", "label": "negative", "shape": "dot", "size": 10}, {"id": "im", "label": "positive", "shape": "dot", "size": 10}, {"id": "avid", "label": "positive", "shape": "dot", "size": 10}, {"id": "sure", "label": "neutral", "shape": "dot", "size": 10}, {"id": "know", "label": "neutral", "shape": "dot", "size": 10}, {"id": "hangover", "label": "neutral", "shape": "dot", "size": 10}, {"id": "fan", "label": "positive", "shape": "dot", "size": 10}, {"id": "people", "label": "neutral", "shape": "dot", "size": 10}, {"id": "hangovers", "label": "neutral", "shape": "dot", "size": 10}, {"id": "glad", "label": "neutral", "shape": "dot", "size": 10}, {"id": "fragile", "label": "neutral", "shape": "dot", "size": 10}, {"id": "morning", "label": "neutral", "shape": "dot", "size": 10}, {"id": "tell", "label": "positive", "shape": "dot", "size": 10}, {"id": "wow", "label": "positive", "shape": "dot", "size": 10}, {"id": "careys", "label": "positive", "shape": "dot", "size": 10}, {"id": "butt", "label": "positive", "shape": "dot", "size": 10}, {"id": "competition", "label": "positive", "shape": "dot", "size": 10}, {"id": "see", "label": "positive", "shape": "dot", "size": 10}, {"id": "soon", "label": "positive", "shape": "dot", "size": 10}, {"id": "mountains", "label": "positive", "shape": "dot", "size": 10}, {"id": "visiting", "label": "positive", "shape": "dot", "size": 10}, {"id": "katie", "label": "positive", "shape": "dot", "size": 10}, {"id": "eating", "label": "positive", "shape": "dot", "size": 10}, {"id": "chips", "label": "positive", "shape": "dot", "size": 10}, {"id": "fudge", "label": "positive", "shape": "dot", "size": 10}, {"id": "stocking", "label": "positive", "shape": "dot", "size": 10}, {"id": "lovely", "label": "positive", "shape": "dot", "size": 10}, {"id": "smelling", "label": "positive", "shape": "dot", "size": 10}, {"id": "soaps", "label": "positive", "shape": "dot", "size": 10}, {"id": "sigh", "label": "negative", "shape": "dot", "size": 10}, {"id": "lonely", "label": "negative", "shape": "dot", "size": 10}, {"id": "profession", "label": "negative", "shape": "dot", "size": 10}, {"id": "speakeasy", "label": "negative", "shape": "dot", "size": 10}, {"id": "theaters", "label": "negative", "shape": "dot", "size": 10}, {"id": "sick", "label": "negative", "shape": "dot", "size": 10}, {"id": "flu", "label": "negative", "shape": "dot", "size": 10}, {"id": "like", "label": "negative", "shape": "dot", "size": 10}, {"id": "thing", "label": "negative", "shape": "dot", "size": 10}, {"id": "boss", "label": "boss", "shape": "dot", "size": 10}, {"id": "shes", "label": "shes", "shape": "dot", "size": 10}, {"id": "moving", "label": "moving", "shape": "dot", "size": 10}, {"id": "nyc", "label": "nyc", "shape": "dot", "size": 10}, {"id": "lol", "label": "lol", "shape": "dot", "size": 10}, {"id": "gross", "label": "gross", "shape": "dot", "size": 10}, {"id": "theyre", "label": "theyre", "shape": "dot", "size": 10}, {"id": "thank", "label": "thank", "shape": "dot", "size": 10}, {"id": "afrin", "label": "afrin", "shape": "dot", "size": 10}, {"id": "nasal", "label": "nasal", "shape": "dot", "size": 10}, {"id": "spray", "label": "spray", "shape": "dot", "size": 10}, {"id": "also", "label": "also", "shape": "dot", "size": 10}, {"id": "got", "label": "got", "shape": "dot", "size": 10}, {"id": "giant", "label": "giant", "shape": "dot", "size": 10}, {"id": "teacup", "label": "teacup", "shape": "dot", "size": 10}, {"id": "tonight", "label": "tonight", "shape": "dot", "size": 10}, {"id": "movies", "label": "neutral", "shape": "dot", "size": 10}, {"id": "irratated", "label": "negative", "shape": "dot", "size": 10}, {"id": "support", "label": "positive", "shape": "dot", "size": 10}, {"id": "yellow", "label": "yellow", "shape": "dot", "size": 10}, {"id": "talk", "label": "talk", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"from": "enjoy", "label": 1, "to": "ride", "weight": 1}, {"from": "warm", "label": 1, "to": "soy", "weight": 1}, {"from": "soy", "label": 1, "to": "milk", "weight": 1}, {"from": "milk", "label": 1, "to": "amazake", "weight": 1}, {"from": "amazake", "label": 1, "to": "cocoa", "weight": 1}, {"from": "cocoa", "label": 1, "to": "powder", "weight": 1}, {"from": "powder", "label": 1, "to": "agave", "weight": 1}, {"from": "hope", "label": 1, "to": "mums", "weight": 1}, {"from": "hope", "label": 1, "to": "free", "weight": 1}, {"from": "hope", "label": 1, "to": "youre", "weight": 1}, {"from": "mums", "label": 1, "to": "mothers", "weight": 1}, {"from": "mothers", "label": 1, "to": "day", "weight": 1}, {"from": "day", "label": 1, "to": "love", "weight": 1}, {"from": "day", "label": 1, "to": "good", "weight": 1}, {"from": "day", "label": 1, "to": "driving", "weight": 1}, {"from": "day", "label": 1, "to": "sad", "weight": 1}, {"from": "day", "label": 1, "to": "beer", "weight": 1}, {"from": "love", "label": 1, "to": "close", "weight": 1}, {"from": "love", "label": 1, "to": "seems", "weight": 1}, {"from": "love", "label": 1, "to": "felt", "weight": 1}, {"from": "love", "label": 1, "to": "magazine", "weight": 1}, {"from": "love", "label": 1, "to": "magazines", "weight": 1}, {"from": "love", "label": 1, "to": "id", "weight": 1}, {"from": "love", "label": 1, "to": "work", "weight": 1}, {"from": "close", "label": 1, "to": "family", "weight": 1}, {"from": "family", "label": 1, "to": "friends", "weight": 1}, {"from": "friends", "label": 1, "to": "ur", "weight": 1}, {"from": "friends", "label": 1, "to": "follow", "weight": 1}, {"from": "missed", "label": 1, "to": "awesome", "weight": 1}, {"from": "awesome", "label": 1, "to": "weather", "weight": 1}, {"from": "weather", "label": 1, "to": "movie", "weight": 1}, {"from": "movie", "label": 1, "to": "drinking", "weight": 1}, {"from": "movie", "label": 1, "to": "goers", "weight": 1}, {"from": "hi", "label": 1, "to": "one", "weight": 1}, {"from": "one", "label": 1, "to": "kiwi", "weight": 1}, {"from": "kiwi", "label": 1, "to": "artist", "weight": 1}, {"from": "kiwi", "label": 1, "to": "another", "weight": 1}, {"from": "artist", "label": 1, "to": "another", "weight": 1}, {"from": "new", "label": 1, "to": "picture", "weight": 1}, {"from": "picture", "label": 1, "to": "pretty", "weight": 1}, {"from": "pretty", "label": 1, "to": "reflecting", "weight": 1}, {"from": "reflecting", "label": 1, "to": "sunlight", "weight": 1}, {"from": "sunlight", "label": 1, "to": "leaves", "weight": 1}, {"from": "okie", "label": 1, "to": "gon", "weight": 1}, {"from": "gon", "label": 1, "to": "na", "weight": 1}, {"from": "na", "label": 1, "to": "tweet", "weight": 1}, {"from": "tweet", "label": 1, "to": "loosing", "weight": 1}, {"from": "loosing", "label": 1, "to": "guys", "weight": 1}, {"from": "guys", "label": 1, "to": "girls", "weight": 1}, {"from": "everyone", "label": 1, "to": "seems", "weight": 1}, {"from": "felt", "label": 1, "to": "kinda", "weight": 1}, {"from": "kinda", "label": 1, "to": "lazy", "weight": 1}, {"from": "lazy", "label": 1, "to": "repetative", "weight": 1}, {"from": "repetative", "label": 1, "to": "really", "weight": 1}, {"from": "really", "label": 1, "to": "disappointed", "weight": 1}, {"from": "really", "label": 1, "to": "nowyour", "weight": 1}, {"from": "really", "label": 1, "to": "kickin", "weight": 1}, {"from": "burnt", "label": 1, "to": "hand", "weight": 1}, {"from": "hand", "label": 1, "to": "cooker", "weight": 1}, {"from": "cooker", "label": 1, "to": "hurts", "weight": 1}, {"from": "im", "label": 1, "to": "avid", "weight": 1}, {"from": "im", "label": 1, "to": "sure", "weight": 1}, {"from": "im", "label": 1, "to": "know", "weight": 1}, {"from": "im", "label": 1, "to": "hangover", "weight": 1}, {"from": "avid", "label": 1, "to": "fan", "weight": 1}, {"from": "fan", "label": 1, "to": "magazine", "weight": 1}, {"from": "sure", "label": 1, "to": "people", "weight": 1}, {"from": "people", "label": 1, "to": "hangovers", "weight": 1}, {"from": "hangovers", "label": 1, "to": "glad", "weight": 1}, {"from": "glad", "label": 1, "to": "know", "weight": 1}, {"from": "hangover", "label": 1, "to": "free", "weight": 1}, {"from": "youre", "label": 1, "to": "fragile", "weight": 1}, {"from": "fragile", "label": 1, "to": "morning", "weight": 1}, {"from": "work", "label": 1, "to": "tell", "weight": 1}, {"from": "tell", "label": 1, "to": "ur", "weight": 1}, {"from": "wow", "label": 1, "to": "nowyour", "weight": 1}, {"from": "kickin", "label": 1, "to": "careys", "weight": 1}, {"from": "careys", "label": 1, "to": "butt", "weight": 1}, {"from": "butt", "label": 1, "to": "competition", "weight": 1}, {"from": "competition", "label": 1, "to": "see", "weight": 1}, {"from": "see", "label": 1, "to": "soon", "weight": 1}, {"from": "driving", "label": 1, "to": "mountains", "weight": 1}, {"from": "mountains", "label": 1, "to": "visiting", "weight": 1}, {"from": "visiting", "label": 1, "to": "katie", "weight": 1}, {"from": "katie", "label": 1, "to": "eating", "weight": 1}, {"from": "eating", "label": 1, "to": "chips", "weight": 1}, {"from": "chips", "label": 1, "to": "fudge", "weight": 1}, {"from": "fudge", "label": 1, "to": "stocking", "weight": 1}, {"from": "stocking", "label": 1, "to": "lovely", "weight": 1}, {"from": "lovely", "label": 1, "to": "smelling", "weight": 1}, {"from": "smelling", "label": 1, "to": "soaps", "weight": 1}, {"from": "sigh", "label": 1, "to": "sad", "weight": 1}, {"from": "sad", "label": 1, "to": "lonely", "weight": 1}, {"from": "lonely", "label": 1, "to": "profession", "weight": 1}, {"from": "beer", "label": 1, "to": "drinking", "weight": 1}, {"from": "goers", "label": 1, "to": "speakeasy", "weight": 1}, {"from": "speakeasy", "label": 1, "to": "theaters", "weight": 1}, {"from": "sick", "label": 1, "to": "flu", "weight": 1}, {"from": "flu", "label": 1, "to": "like", "weight": 1}, {"from": "like", "label": 1, "to": "thing", "weight": 1}, {"from": "boss", "label": 1, "to": "shes", "weight": 1}, {"from": "shes", "label": 1, "to": "moving", "weight": 1}, {"from": "moving", "label": 1, "to": "nyc", "weight": 1}, {"from": "lol", "label": 1, "to": "gross", "weight": 1}, {"from": "gross", "label": 1, "to": "theyre", "weight": 1}, {"from": "thank", "label": 1, "to": "afrin", "weight": 1}, {"from": "afrin", "label": 1, "to": "nasal", "weight": 1}, {"from": "nasal", "label": 1, "to": "spray", "weight": 1}, {"from": "spray", "label": 1, "to": "also", "weight": 1}, {"from": "also", "label": 1, "to": "got", "weight": 1}, {"from": "got", "label": 1, "to": "giant", "weight": 1}, {"from": "giant", "label": 1, "to": "teacup", "weight": 1}, {"from": "teacup", "label": 1, "to": "tonight", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
